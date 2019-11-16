@@ -109,8 +109,11 @@ void setup() {
   //Need to define the Pins as input (defaults)
   tristate();
 
-  // disable ADC (power saving):
-  ADCSRA = 0;  
+  // Disable ADC (power saving):
+  ADCSRA = 0;
+
+  // Shut down Timer/Counter1, Timer/Counter0, ISI, ADC
+  PRR = 1;
 }
 
 void loop(){
