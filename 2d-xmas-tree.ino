@@ -65,6 +65,8 @@ static const uint8_t animation[] PROGMEM = {
 //increase this to have the leds "flicker"
 #define LED_ON_DELAY 1000
 
+#define NUM_LEDS 20
+
 
 //-------------------------------------------------------------------------------------
 //below is the code to make this all happen, modify to make even fancier effects as you wish!
@@ -118,7 +120,7 @@ void loop(){
   unsigned long instroStartTime = millis();
   while (millis() - instroStartTime < INTROTIME) {
     long randomValue = random();
-    int ledtoset = randomValue % 20;
+    int ledtoset = randomValue % NUM_LEDS;
     bool ledbool = randomValue & 0b10000000;
     ledstate[ledtoset] = ledbool;
     showleds(10);
@@ -127,11 +129,12 @@ void loop(){
   
   //loop trough the states in state_table  
 
-  for (int iState = 0; iState < sizeof(animation) * 8 / 20; ++iState) {
-    uint16_t startPosition = iState * 20;
+  
+  for (int iState = 0; iState < sizeof(animation) * 8 / NUM_LEDS; ++iState) {
+    uint16_t startPosition = iState * NUM_LEDS;
     uint8_t byteIndex = startPosition / 8;
     uint8_t bitIndex = startPosition % 8;
-    for (int i = 0; i < 20; ++i) {
+    for (int i = 0; i < NUM_LEDS; ++i) {
       if (bitIndex == 8) {
         bitIndex = 0;
         byteIndex += 1;
@@ -150,33 +153,30 @@ void showleds(int showTimeMs){
   // this cycles trough all the leds in the array and show them.
   unsigned long startTime = millis();
   while(millis() - startTime <= showTimeMs) {
-    for (int i=0; i<20; i++) {
-     bool state = ledstate[i];
-     showled(i,state);
+    for (int i = 0; i < NUM_LEDS; i++) {
+      bool ledOn = ledstate[i];
+      if (ledOn) {
+        showled(i);
+      }
     }
   }  
 }
 
-void showled(uint8_t led, bool state){
-  //this outputs the led state
+void showled(uint8_t led){
+  //Lookup the pin for high and low:
+  const LedControlPin &pinouts = ledControlPins[led];
 
-  if(state==true){
-    //Lookup the pin for high and low:
-    const LedControlPin &pinouts = ledControlPins[led];
+  //set the pins to output:
+  DDRB |= (1 << pinouts.pvcc) | (1 << pinouts.pgnd);
 
-    //set the pins to output:
-    DDRB |= (1 << pinouts.pvcc) | (1 << pinouts.pgnd);
+  // write the status:
+  PORTB |= (1 << pinouts.pvcc); // set HIGH
 
-    // write the status:
-    PORTB |= (1 << pinouts.pvcc); // set HIGH
-
-    //wait a short time to let the LED shine
-    delayMicroseconds(LED_ON_DELAY);
-    
-    //ensure its all turned off properly for the next state
-    tristate();
-  }
- 
+  //wait a short time to let the LED shine
+  delayMicroseconds(LED_ON_DELAY);
+  
+  //ensure its all turned off properly for the next state
+  tristate();
 }
 
 void tristate(){
