@@ -44,6 +44,7 @@
                                     SIZEOF_ ## t ## _IS<sizeof(t)> SIZEOF_ ## t ## _IS;
 
 #include <avr/pgmspace.h>
+#include <util/delay.h>
 
 //Enter the light pattern here:
 //use the online generator: https://grweirioreh.reihrg.eu
@@ -127,7 +128,7 @@ void loop(){
     bool ledbool = randomValue & 0b10000000;
     ledstate[ledtoset] = ledbool;
     showleds(10);
-    delayMicroseconds(1000);
+    _delay_us(1000);
   }
   
   //loop trough the states in state_table  
@@ -152,7 +153,7 @@ void loop(){
 
 //-------------------------------------------------------------------------------------
 
-void showleds(int showTimeMs){
+void showleds(unsigned int showTimeMs){
   // this cycles trough all the leds in the array and show them.
   unsigned long startTime = millis();
   while(millis() - startTime <= showTimeMs) {
@@ -176,7 +177,7 @@ void showled(uint8_t led){
   PORTB |= (1 << pinouts.pvcc); // set HIGH
 
   //wait a short time to let the LED shine
-  delayMicroseconds(LED_ON_DELAY);
+  _delay_us(LED_ON_DELAY);
   
   //ensure its all turned off properly for the next state
   tristate();
