@@ -1,33 +1,34 @@
 /* 
- 2D XMAS Tree Code
- charlieplexing christmas decoration
- 5 Pins with 20 LED´s
+  2D XMAS Tree Code
+  charlieplexing christmas decoration
+  5 Pins with 20 LED´s
 
- ATtiny25, 1MHZ Internal Clock, no BOD
+  Designed by:
 
+    https://www.designer2k2.at
 
- Hosted on Github: 
- 
- https://github.com/designer2k2/2d-xmas-tree
+  Enhanced by:
 
- Made by:
- 
- https://www.designer2k2.at
+    https://github.com/kasedy
+
+      1. Significantly reduced memory footprint
+      2. Improved power consumption optimizations
+      3. Converted to platform IO project
 
   MIT License
-  
+
   Copyright (c) [2018] [Stephan Martin]
-  
+
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
   furnished to do so, subject to the following conditions:
-  
+
   The above copyright notice and this permission notice shall be included in all
   copies or substantial portions of the Software.
-  
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -37,14 +38,10 @@
   SOFTWARE.
 */
 
-#define COMPILE_TIME_SIZEOF(t)      template<int s> struct SIZEOF_ ## t ## _IS; \
-                                    struct foo { \
-                                        int a,b; \
-                                    }; \
-                                    SIZEOF_ ## t ## _IS<sizeof(t)> SIZEOF_ ## t ## _IS;
-
 #include <avr/pgmspace.h>
 #include <util/delay.h>
+
+#include "helpers.h"
 
 //Enter the light pattern here:
 //use the online generator: https://grweirioreh.reihrg.eu
@@ -82,35 +79,32 @@ struct LedControlPin {
 };
 
 const LedControlPin ledControlPins[] = {
-  {0,1},
-  {1,0},
-  {1,2},
-  {2,1},
-  {2,3},
-  {3,2},
-  {3,4},
-  {4,3},
-  {0,2},
-  {2,0},
-  {1,3},
-  {3,1},
-  {2,4},
-  {4,2},
-  {0,3},
-  {3,0},
-  {1,4},
-  {4,1},
-  {0,4},
-  {4,0},
+  {0, 1},
+  {1, 0},
+  {1, 2},
+  {2, 1},
+  {2, 3},
+  {3, 2},
+  {3, 4},
+  {4, 3},
+  {0, 2},
+  {2, 0},
+  {1, 3},
+  {3, 1},
+  {2, 4},
+  {4, 2},
+  {0, 3},
+  {3, 0},
+  {1, 4},
+  {4, 1},
+  {0, 4},
+  {4, 0},
 };
 
-//placeholder for all current leds:
-uint8_t ledstate[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}; 
+// Placeholder for all current leds.
+uint8_t ledstate[NUM_LEDS] = {};
 
 void setup() {
-  //Need to define the Pins as input (defaults)
-  extinguish();
-
   // Disable ADC (power saving):
   ADCSRA = 0;
 
@@ -119,9 +113,8 @@ void setup() {
 }
 
 void loop(){
-  // put your main code here, to run repeatedly:
-
-  // every 100ms change a random led to a random state
+  // Every 10ms change a random led to a random state.
+  // Delay makes LEDs flikering.
   unsigned long instroStartTime = millis();
   while (millis() - instroStartTime < INTROTIME) {
     long randomValue = random();
@@ -130,12 +123,10 @@ void loop(){
     ledstate[ledtoset] = ledbool;
     showleds(10);
     extinguish();
-    _delay_us(INTRO_BLYNK_DELAY_US); // blynking
+    _delay_us(INTRO_BLYNK_DELAY_US);
   }
   
-  //loop trough the states in state_table  
-
-  
+  // Show preprogrammed animation.
   for (unsigned int iState = 0; iState < sizeof(animation) * 8 / NUM_LEDS; ++iState) {
     uint16_t startPosition = iState * NUM_LEDS;
     uint8_t byteIndex = startPosition / 8;
@@ -156,7 +147,8 @@ void loop(){
 //-------------------------------------------------------------------------------------
 
 void showleds(unsigned int showTimeMs) {
-  // this cycles trough all the leds in the array and show them.
+  // This cycles trough all the LEDs in the array and show them one-by-one. That 
+  // happens so quickly that human eye sees like LEDs shine all together.
   unsigned long startTime = millis();
   while(millis() - startTime <= showTimeMs) {
     for (int i = 0; i < NUM_LEDS; i++) {
@@ -181,12 +173,12 @@ void showled(uint8_t led) {
   // Wait a short time to let the LED shine.
   _delay_us(LED_ON_DELAY);
 
-  // Dont extinguish. Let LED shine while microcontroller decides which let to 
+  // Dont extinguish. Let LED shine while microcontroller decides which LED to 
   // light next.
 }
 
 void extinguish() {
-  //This tristates all pins
+  // This tristates all pins
   DDRB &= ~(0b00011111); // Input state for pins 0-4 pins
   PORTB &= ~(0b00011111); //ensure pullups are off.
 }
