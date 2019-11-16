@@ -53,7 +53,7 @@
 constexpr int sqr1(int arg)
 { return arg * arg; }
 
-static const bool state_table[14][21] PROGMEM = {
+static const bool state_table[14][20] PROGMEM = {
                  {1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
                  {0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
                  {0,0,0,0,0,0,1,0,1,0,1,1,0,0,0,0,0,0,0,0},
@@ -117,7 +117,7 @@ const LedControlPin ledControlPins[] = {
 };
 
 //placeholder for all current leds:
-bool ledstate[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}; 
+uint8_t ledstate[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}; 
 
 void setup() {
   //Need to define the Pins as input (defaults)
