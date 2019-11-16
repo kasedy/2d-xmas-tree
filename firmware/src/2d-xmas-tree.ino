@@ -62,7 +62,7 @@ static const uint8_t animation[] PROGMEM = COMPILED_ANIMATION;
 //time a led is on in us:
 //increase this to have the leds "flicker"
 #define LED_ON_DELAY 1000
-#define INTRO_BLYNK_DELAY_US 1000
+#define INTRO_BLINK_DELAY_US 500
 
 #define NUM_LEDS 20
 
@@ -122,7 +122,7 @@ void loop(){
     ledstate[ledtoset] = ledbool;
     showleds(10);
     extinguish();
-    _delay_us(INTRO_BLYNK_DELAY_US);
+    _delay_us(INTRO_BLINK_DELAY_US);
   }
   
   // Show preprogrammed animation.
