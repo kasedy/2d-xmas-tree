@@ -133,10 +133,12 @@ void loop(){
   // every 100ms change a random led to a random state
   unsigned long instroStartTime = millis();
   while (millis() - instroStartTime < INTROTIME) {
-    int ledtoset = random(20);
-    bool ledbool = random(2);
+    long randomValue = random();
+    int ledtoset = randomValue % 20;
+    bool ledbool = randomValue & 0b10000000;
     ledstate[ledtoset] = ledbool;
-    showleds(10); 
+    showleds(10);
+    delayMicroseconds(1000);
   }
   
   //loop trough the states in state_table  
