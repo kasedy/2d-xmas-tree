@@ -41,22 +41,22 @@
 #include <avr/pgmspace.h>
 #include <util/delay.h>
 
-#include "helpers.h"
+#ifndef COMPILED_ANIMATION
+  #define COMPILED_ANIMATION {\
+    0x03, 0x00, 0xC0, 0x03, 0x00, 0x40, 0x0D, 0x00, \
+    0x28, 0x11, 0x00, 0xE0, 0x0E, 0x00, 0x40, 0x04, \
+    0x01, 0x93, 0x80, 0x00, 0xE0, 0x20, 0x00, 0x00, \
+    0x0C, 0x12, 0x14, 0x40, 0x10, 0x30, 0x00, 0x02, \
+    0x08, 0x00, 0x40 \
+  }
+#endif
 
-//Enter the light pattern here:
-//use the online generator: https://grweirioreh.reihrg.eu
-//dont forget to update the number of rows if changed
+static const uint8_t animation[] PROGMEM = COMPILED_ANIMATION;
 
-static const uint8_t animation[] PROGMEM = {
-  0x03, 0x00, 0xC0, 0x03, 0x00, 0x40, 0x0D, 0x00, 0x28, 0x11, 0x00, 0xE0, 0x0E, 0x00, 0x40, 0x04,
-  0x01, 0x93, 0x80, 0x00, 0xE0, 0x20, 0x00, 0x00, 0x0C, 0x12, 0x14, 0x40, 0x10, 0x30, 0x00, 0x02,
-  0x08, 0x00, 0x40
-};
-
-//the delay in ms between the patterns:
+// The delay in ms between the patterns:
 #define PATTERN_DELAY 500
 
-//intro time (how long the random change happens) in ms:
+// Intro time (how long the random change happens) in ms:
 #define INTROTIME 10000
 
 //time a led is on in us:
@@ -65,7 +65,6 @@ static const uint8_t animation[] PROGMEM = {
 #define INTRO_BLYNK_DELAY_US 1000
 
 #define NUM_LEDS 20
-
 
 //-------------------------------------------------------------------------------------
 //below is the code to make this all happen, modify to make even fancier effects as you wish!
