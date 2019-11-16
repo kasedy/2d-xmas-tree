@@ -65,6 +65,7 @@ static const uint8_t animation[] PROGMEM = {
 //time a led is on in us:
 //increase this to have the leds "flicker"
 #define LED_ON_DELAY 1000
+#define INTRO_BLYNK_DELAY_US 1000
 
 #define NUM_LEDS 20
 
@@ -108,7 +109,7 @@ uint8_t ledstate[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
 void setup() {
   //Need to define the Pins as input (defaults)
-  tristate();
+  extinguish();
 
   // Disable ADC (power saving):
   ADCSRA = 0;
@@ -128,13 +129,14 @@ void loop(){
     bool ledbool = randomValue & 0b10000000;
     ledstate[ledtoset] = ledbool;
     showleds(10);
-    _delay_us(1000);
+    extinguish();
+    _delay_us(INTRO_BLYNK_DELAY_US); // blynking
   }
   
   //loop trough the states in state_table  
 
   
-  for (int iState = 0; iState < sizeof(animation) * 8 / NUM_LEDS; ++iState) {
+  for (unsigned int iState = 0; iState < sizeof(animation) * 8 / NUM_LEDS; ++iState) {
     uint16_t startPosition = iState * NUM_LEDS;
     uint8_t byteIndex = startPosition / 8;
     uint8_t bitIndex = startPosition % 8;
@@ -153,7 +155,7 @@ void loop(){
 
 //-------------------------------------------------------------------------------------
 
-void showleds(unsigned int showTimeMs){
+void showleds(unsigned int showTimeMs) {
   // this cycles trough all the leds in the array and show them.
   unsigned long startTime = millis();
   while(millis() - startTime <= showTimeMs) {
@@ -166,24 +168,24 @@ void showleds(unsigned int showTimeMs){
   }  
 }
 
-void showled(uint8_t led){
-  //Lookup the pin for high and low:
+void showled(uint8_t led) {
+  // Lookup the pin for high and low:
   const LedControlPin &pinouts = ledControlPins[led];
 
-  //set the pins to output:
-  DDRB |= (1 << pinouts.pvcc) | (1 << pinouts.pgnd);
+  // Set pins that contold LED to output. The other pins will be set to input.
+  DDRB = (1 << pinouts.pvcc) | (1 << pinouts.pgnd);
 
-  // write the status:
-  PORTB |= (1 << pinouts.pvcc); // set HIGH
+  // Write the status.
+  PORTB = (1 << pinouts.pvcc); // set HIGH
 
-  //wait a short time to let the LED shine
+  // Wait a short time to let the LED shine.
   _delay_us(LED_ON_DELAY);
-  
-  //ensure its all turned off properly for the next state
-  tristate();
+
+  // Dont extinguish. Let LED shine while microcontroller decides which let to 
+  // light next.
 }
 
-void tristate(){
+void extinguish() {
   //This tristates all pins
   DDRB &= ~(0b00011111); // Input state for pins 0-4 pins
   PORTB &= ~(0b00011111); //ensure pullups are off.
