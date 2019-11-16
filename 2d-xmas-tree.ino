@@ -44,32 +44,16 @@
                                     SIZEOF_ ## t ## _IS<sizeof(t)> SIZEOF_ ## t ## _IS;
 
 #include <avr/pgmspace.h>
-#include <util/delay.h>
 
 //Enter the light pattern here:
 //use the online generator: https://grweirioreh.reihrg.eu
 //dont forget to update the number of rows if changed
 
-constexpr int sqr1(int arg)
-{ return arg * arg; }
-
-static const bool state_table[14][20] PROGMEM = {
-                 {1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-                 {0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-                 {0,0,0,0,0,0,1,0,1,0,1,1,0,0,0,0,0,0,0,0},
-                 {0,0,0,0,0,0,0,1,0,1,0,0,1,0,0,0,1,0,0,0},
-                 {0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,1,1,1},
-                 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
-                 {0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,0,0},
-                 {1,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0},
-                 {0,0,0,0,0,1,1,1,0,0,0,0,0,1,0,0,0,0,0,0},
-                 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0},
-                 {0,1,0,0,1,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0},
-                 {0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,0,0},
-                 {0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1},
-                 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0}
+static const uint8_t animation[] PROGMEM = {
+  0x03, 0x00, 0xC0, 0x03, 0x00, 0x40, 0x0D, 0x00, 0x28, 0x11, 0x00, 0xE0, 0x0E, 0x00, 0x40, 0x04,
+  0x01, 0x93, 0x80, 0x00, 0xE0, 0x20, 0x00, 0x00, 0x0C, 0x12, 0x14, 0x40, 0x10, 0x30, 0x00, 0x02,
+  0x08, 0x00, 0x40, 0x00, 0x00, 0x04
 };
-#define NumRows 14  //default is 14 (and about the space limit)
 
 //the delay in ms between the patterns:
 #define PATTERN_DELAY 500
@@ -79,7 +63,7 @@ static const bool state_table[14][20] PROGMEM = {
 
 //time a led is on in us:
 //increase this to have the leds "flicker"
-#define ondelay 1000
+#define LED_ON_DELAY 1000
 
 
 //-------------------------------------------------------------------------------------
@@ -143,15 +127,18 @@ void loop(){
   
   //loop trough the states in state_table  
 
-  for (int iState = 0; iState < NumRows; ++iState) {
-    for (int i=0; i<20; i++) {
-      int state = pgm_read_word(&state_table[iState][i]);
-      //PROGMEM with bool gives sometimes strange results, this fixes it:
-      if (state==256){
-        state = 0;
+  for (int iState = 0; iState < sizeof(animation) * 8 / 20; ++iState) {
+    uint16_t startPosition = iState * 20;
+    uint8_t byteIndex = startPosition / 8;
+    uint8_t bitIndex = startPosition % 8;
+    for (int i = 0; i < 20; ++i) {
+      if (bitIndex == 8) {
+        bitIndex = 0;
+        byteIndex += 1;
       }
-     
-      ledstate[i] = state;
+      uint8_t state = pgm_read_byte(animation + byteIndex);
+      ledstate[i] = (state & (1 << bitIndex));
+      bitIndex += 1;
     }
     showleds(PATTERN_DELAY); 
   }
@@ -184,7 +171,7 @@ void showled(uint8_t led, bool state){
     PORTB |= (1 << pinouts.pvcc); // set HIGH
 
     //wait a short time to let the LED shine
-    delayMicroseconds(ondelay);
+    delayMicroseconds(LED_ON_DELAY);
     
     //ensure its all turned off properly for the next state
     tristate();
