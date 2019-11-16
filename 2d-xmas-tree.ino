@@ -37,11 +37,21 @@
   SOFTWARE.
 */
 
+#define COMPILE_TIME_SIZEOF(t)      template<int s> struct SIZEOF_ ## t ## _IS; \
+                                    struct foo { \
+                                        int a,b; \
+                                    }; \
+                                    SIZEOF_ ## t ## _IS<sizeof(t)> SIZEOF_ ## t ## _IS;
+
 #include <avr/pgmspace.h>
+#include <util/delay.h>
 
 //Enter the light pattern here:
 //use the online generator: https://grweirioreh.reihrg.eu
 //dont forget to update the number of rows if changed
+
+constexpr int sqr1(int arg)
+{ return arg * arg; }
 
 static const bool state_table[14][21] PROGMEM = {
                  {1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -62,10 +72,10 @@ static const bool state_table[14][21] PROGMEM = {
 #define NumRows 14  //default is 14 (and about the space limit)
 
 //the delay in ms between the patterns:
-#define pattern_delay 500
+#define PATTERN_DELAY 500
 
 //intro time (how long the random change happens) in ms:
-#define introtime 10000
+#define INTROTIME 10000
 
 //time a led is on in us:
 //increase this to have the leds "flicker"
@@ -77,15 +87,37 @@ static const bool state_table[14][21] PROGMEM = {
 
 //This holds the pin configuration to make the 20 led charlieplexing,
 //only 1 in PROGMEM, as the FLASH is full, but both are too large for RAM.
-int pinvcc[] = {0,1,1,2,2,3,3,4,0,2,1,3,2,4,0,3,1,4,0,4};
-const PROGMEM int pingnd[] = {1,0,2,1,3,2,4,3,2,0,3,1,4,2,3,0,4,1,4,0};
+
+struct LedControlPin {
+  uint8_t pvcc : 4;
+  uint8_t pgnd : 4;
+};
+
+const LedControlPin ledControlPins[] = {
+  {0,1},
+  {1,0},
+  {1,2},
+  {2,1},
+  {2,3},
+  {3,2},
+  {3,4},
+  {4,3},
+  {0,2},
+  {2,0},
+  {1,3},
+  {3,1},
+  {2,4},
+  {4,2},
+  {0,3},
+  {3,0},
+  {1,4},
+  {4,1},
+  {0,4},
+  {4,0},
+};
 
 //placeholder for all current leds:
 bool ledstate[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}; 
-
-unsigned long lasttime, lastintrotime;
-
-int iState;
 
 void setup() {
   //Need to define the Pins as input (defaults)
@@ -93,81 +125,61 @@ void setup() {
 
   // disable ADC (power saving):
   ADCSRA = 0;  
-
-  //init the time with 0
-  lasttime = 0;
-  lastintrotime = introtime;
-
-  //start with the first pattern
-  iState = 0;
-
 }
 
 void loop(){
   // put your main code here, to run repeatedly:
 
   // every 100ms change a random led to a random state
-  if(millis()<lastintrotime){
-    if(millis()>(lasttime+10)){
-      int ledtoset = random(20);
-      bool ledbool = random(2);
-      ledstate[ledtoset] = ledbool;
-      lasttime = millis();
-    }
-  }else{
+  unsigned long instroStartTime = millis();
+  while (millis() - instroStartTime < INTROTIME) {
+    int ledtoset = random(20);
+    bool ledbool = random(2);
+    ledstate[ledtoset] = ledbool;
+    showleds(10); 
+  }
+  
   //loop trough the states in state_table  
 
-    if(millis()>(lasttime+pattern_delay)){
-      for (int i=0; i<20; i++) {
-        int state = pgm_read_word(&state_table[iState][i]);
-
-        //PROGMEM with bool gives sometimes strange results, this fixes it:
-        if (state==256){
-          state = 0;
-        }
-        
-        ledstate[i] = state;
+  for (int iState = 0; iState < NumRows; ++iState) {
+    for (int i=0; i<20; i++) {
+      int state = pgm_read_word(&state_table[iState][i]);
+      //PROGMEM with bool gives sometimes strange results, this fixes it:
+      if (state==256){
+        state = 0;
       }
-      iState = iState + 1;
-      if(iState>=NumRows){
-        iState = 0;
-        lastintrotime = millis() + introtime;
-      }
-      lasttime = millis();
+     
+      ledstate[i] = state;
     }
+    showleds(PATTERN_DELAY); 
   }
-
-  showleds(); 
-  
 }
 
 //-------------------------------------------------------------------------------------
 
-void showleds(){
+void showleds(int showTimeMs){
   // this cycles trough all the leds in the array and show them.
-  
-  for (int i=0; i<20; i++) {
-   bool state = ledstate[i];
-   showled(i,state);
-  }
-  
+  unsigned long startTime = millis();
+  while(millis() - startTime <= showTimeMs) {
+    for (int i=0; i<20; i++) {
+     bool state = ledstate[i];
+     showled(i,state);
+    }
+  }  
 }
 
-void showled(int led, bool state){
+void showled(uint8_t led, bool state){
   //this outputs the led state
 
   if(state==true){
     //Lookup the pin for high and low:
-    int pvcc = pinvcc[led];
-    int pgnd = pgm_read_word(&pingnd[led]);
+    const LedControlPin &pinouts = ledControlPins[led];
 
-    //set the pinmode for it:
-    pinMode(pvcc,OUTPUT);
-    pinMode(pgnd,OUTPUT);
+    //set the pins to output:
+    DDRB |= (1 << pinouts.pvcc) | (1 << pinouts.pgnd);
 
-    //write the status:
-    digitalWrite(pvcc,HIGH);
-    digitalWrite(pgnd,LOW);
+    // write the status:
+    PORTB |= (1 << pinouts.pvcc); // set HIGH
 
     //wait a short time to let the LED shine
     delayMicroseconds(ondelay);
@@ -180,8 +192,6 @@ void showled(int led, bool state){
 
 void tristate(){
   //This tristates all pins
-  for (int i=0; i<5; i++) {
-   pinMode(i,INPUT);   //Input state
-   digitalWrite(i,LOW);//ensure pullups are off.
-  }
+  DDRB &= ~(0b00011111); // Input state for pins 0-4 pins
+  PORTB &= ~(0b00011111); //ensure pullups are off.
 }
