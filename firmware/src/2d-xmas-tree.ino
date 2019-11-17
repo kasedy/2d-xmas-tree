@@ -38,12 +38,14 @@
   SOFTWARE.
 */
 
+#include "helpers.h"
+
 #include <avr/pgmspace.h>
 #include <util/delay.h>
 
 #define NUM_LEDS 20
 
-#ifndef COMPILED_ANIMATION
+#if !defined(COMPILED_ANIMATION) && !defined(ANIMATION_END_FRAMES)
   #define COMPILED_ANIMATION {\
     0x03, 0x00, 0xC0, 0x03, 0x00, 0x40, 0x0D, 0x00, \
     0x28, 0x11, 0x00, 0xE0, 0x0E, 0x00, 0x40, 0x04, \
@@ -51,21 +53,20 @@
     0x0C, 0x12, 0x14, 0x40, 0x10, 0x30, 0x00, 0x02, \
     0x08, 0x00, 0x40 \
   }
+  #define ANIMATION_END_FRAMES {14}
 #endif
 
 static const uint8_t animation[] PROGMEM = COMPILED_ANIMATION;
+static const uint16_t animationEndFrames[] = ANIMATION_END_FRAMES;
+static uint8_t currentAnimation = 0;
 
-// The delay in ms between the patterns:
+// The delay in ms between the Frames when displaying preprogramed animation.
 #define PATTERN_DELAY 500
 
 // Intro time (how long the random change happens) in ms:
-#define INTROTIME 10000
-
-// Delay to make intro loghts flikering
-#define INTRO_BLINK_DELAY_US 0
+#define STARTS_ANIMATION_TIME_MS 10000
 
 // This holds the pin configuration to make the 20 led charlieplexing.
-
 struct LedControlPin {
   uint8_t pvcc : 4;
   uint8_t pgnd : 4;
@@ -105,12 +106,23 @@ void setup() {
   PRR = 1;
 }
 
+uint16_t fastRandom() {
+  static uint16_t seed = 0xBEEF;
+  seed = (seed * 2053 + 13849) % 65536;
+  return seed;
+}
+
 void loop() {
+  showStarsAnimation();
+  showNextPreprogrammedAnimation();
+}
+
+void showStarsAnimation() {
   // Every 25ms change a random led to a random state.
   // Extingush command makes LEDs flikering.
   unsigned long instroStartTime = millis();
-  do {
-    int32_t randomValue = random();
+  while (millis() - instroStartTime < STARTS_ANIMATION_TIME_MS) {
+    uint16_t randomValue = fastRandom();
     int ledtoset = randomValue % NUM_LEDS;
     bool ledbool = randomValue & 0b10000000;
     ledstate[ledtoset] = ledbool;
@@ -119,23 +131,37 @@ void loop() {
     #if F_CPU >= 1000000L
       _delay_ms(2);
     #endif
-  } while (millis() - instroStartTime < INTROTIME);
-  
+  }
+}
+
+void showNextPreprogrammedAnimation() {
+  if (ARRAY_LEN(animationEndFrames) == 0) {
+    return;
+  }
+
+  uint16_t startFrame = currentAnimation == 0 ? 0 : animationEndFrames[currentAnimation - 1];
+  uint16_t endFrame = animationEndFrames[currentAnimation];
+
   // Show preprogrammed animation.
-  for (unsigned int iState = 0; iState < sizeof(animation) * 8 / NUM_LEDS; ++iState) {
-    uint16_t startPosition = iState * NUM_LEDS;
+  for (uint16_t iFrame = startFrame; iFrame < endFrame; ++iFrame) {
+    uint16_t startPosition = iFrame * NUM_LEDS;
     uint8_t byteIndex = startPosition / 8;
     uint8_t bitIndex = startPosition % 8;
+    uint8_t state = pgm_read_byte(animation + byteIndex);
     for (int i = 0; i < NUM_LEDS; ++i) {
       if (bitIndex == 8) {
         bitIndex = 0;
         byteIndex += 1;
+        state = pgm_read_byte(animation + byteIndex);
       }
-      uint8_t state = pgm_read_byte(animation + byteIndex);
       ledstate[i] = (state & (1 << bitIndex));
       bitIndex += 1;
     }
     showleds(PATTERN_DELAY); 
+  }
+
+  if (++currentAnimation >= ARRAY_LEN(animationEndFrames)) {
+    currentAnimation = 0;
   }
 }
 
@@ -145,14 +171,17 @@ void showleds(unsigned int showTimeMs) {
   // This cycles trough all the LEDs in the array and show them one-by-one. That 
   // happens so quickly that human eye sees like LEDs shine all together.
   unsigned long startTime = millis();
-  do {
+  while (true) {
     for (int i = 0; i < NUM_LEDS; i++) {
       bool ledOn = ledstate[i];
       if (ledOn) {
         showled(i);
       }
+      if (millis() - startTime > showTimeMs) {
+        return;
+      }
     }
-  } while (millis() - startTime <= showTimeMs);
+  }
 }
 
 void showled(uint8_t led) {
