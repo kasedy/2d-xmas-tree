@@ -106,15 +106,15 @@ void setup() {
   PRR = 1;
 }
 
+void loop() {
+  showStarsAnimation();
+  showNextPreprogrammedAnimation();
+}
+
 uint16_t fastRandom() {
   static uint16_t seed = 0xBEEF;
   seed = (seed * 2053 + 13849) % 65536;
   return seed;
-}
-
-void loop() {
-  showStarsAnimation();
-  showNextPreprogrammedAnimation();
 }
 
 void showStarsAnimation() {
@@ -139,14 +139,17 @@ void showNextPreprogrammedAnimation() {
     return;
   }
 
-  uint16_t startFrame = currentAnimation == 0 ? 0 : animationEndFrames[currentAnimation - 1];
+  uint16_t startFrame = 0;
+  if (currentAnimation != 0) {
+    startFrame = animationEndFrames[currentAnimation - 1];
+  }
   uint16_t endFrame = animationEndFrames[currentAnimation];
 
   // Show preprogrammed animation.
   for (uint16_t iFrame = startFrame; iFrame < endFrame; ++iFrame) {
-    uint16_t startPosition = iFrame * NUM_LEDS;
-    uint8_t byteIndex = startPosition / 8;
-    uint8_t bitIndex = startPosition % 8;
+    uint16_t startBitPosition = iFrame * NUM_LEDS;
+    uint8_t byteIndex = startBitPosition / 8;
+    uint8_t bitIndex = startBitPosition % 8;
     uint8_t state = pgm_read_byte(animation + byteIndex);
     for (int i = 0; i < NUM_LEDS; ++i) {
       if (bitIndex == 8) {
