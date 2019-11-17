@@ -11,9 +11,10 @@
 
     https://github.com/kasedy
 
-      1. Significantly reduced memory footprint
-      2. Improved power consumption optimizations
-      3. Converted to platform IO project
+      1. Converted to PlatformIo project for ease run animation compressing script and setting fusses
+      2. More animations
+      3. Significantly reduced memory footprint
+      4. Improved power consumption optimizations
 
   MIT License
 
