@@ -41,6 +41,8 @@
 #include <avr/pgmspace.h>
 #include <util/delay.h>
 
+#define NUM_LEDS 20
+
 #ifndef COMPILED_ANIMATION
   #define COMPILED_ANIMATION {\
     0x03, 0x00, 0xC0, 0x03, 0x00, 0x40, 0x0D, 0x00, \
@@ -59,18 +61,10 @@ static const uint8_t animation[] PROGMEM = COMPILED_ANIMATION;
 // Intro time (how long the random change happens) in ms:
 #define INTROTIME 10000
 
-//time a led is on in us:
-//increase this to have the leds "flicker"
-#define LED_ON_DELAY 1000
-#define INTRO_BLINK_DELAY_US 500
+// Delay to make intro loghts flikering
+#define INTRO_BLINK_DELAY_US 0
 
-#define NUM_LEDS 20
-
-//-------------------------------------------------------------------------------------
-//below is the code to make this all happen, modify to make even fancier effects as you wish!
-
-//This holds the pin configuration to make the 20 led charlieplexing,
-//only 1 in PROGMEM, as the FLASH is full, but both are too large for RAM.
+// This holds the pin configuration to make the 20 led charlieplexing.
 
 struct LedControlPin {
   uint8_t pvcc : 4;
@@ -111,19 +105,21 @@ void setup() {
   PRR = 1;
 }
 
-void loop(){
-  // Every 10ms change a random led to a random state.
-  // Delay makes LEDs flikering.
+void loop() {
+  // Every 25ms change a random led to a random state.
+  // Extingush command makes LEDs flikering.
   unsigned long instroStartTime = millis();
-  while (millis() - instroStartTime < INTROTIME) {
-    long randomValue = random();
+  do {
+    int32_t randomValue = random();
     int ledtoset = randomValue % NUM_LEDS;
     bool ledbool = randomValue & 0b10000000;
     ledstate[ledtoset] = ledbool;
-    showleds(10);
+    showleds(25);
     extinguish();
-    _delay_us(INTRO_BLINK_DELAY_US);
-  }
+    #if F_CPU >= 1000000L
+      _delay_ms(2);
+    #endif
+  } while (millis() - instroStartTime < INTROTIME);
   
   // Show preprogrammed animation.
   for (unsigned int iState = 0; iState < sizeof(animation) * 8 / NUM_LEDS; ++iState) {
@@ -149,14 +145,14 @@ void showleds(unsigned int showTimeMs) {
   // This cycles trough all the LEDs in the array and show them one-by-one. That 
   // happens so quickly that human eye sees like LEDs shine all together.
   unsigned long startTime = millis();
-  while(millis() - startTime <= showTimeMs) {
+  do {
     for (int i = 0; i < NUM_LEDS; i++) {
       bool ledOn = ledstate[i];
       if (ledOn) {
         showled(i);
       }
     }
-  }  
+  } while (millis() - startTime <= showTimeMs);
 }
 
 void showled(uint8_t led) {
@@ -168,9 +164,6 @@ void showled(uint8_t led) {
 
   // Write the status.
   PORTB = (1 << pinouts.pvcc); // set HIGH
-
-  // Wait a short time to let the LED shine.
-  _delay_us(LED_ON_DELAY);
 
   // Dont extinguish. Let LED shine while microcontroller decides which LED to 
   // light next.
