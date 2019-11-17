@@ -1,4 +1,4 @@
-# 2d-xmas-Tree
+# 2d-xmas-Tree-art
 a DIY flat christmas decoration with a ATtiny25, 20 led´s and a coin cell battery 
 
 ## Differencies from the original project
