@@ -1,6 +1,12 @@
 # 2d-xmas-Tree
 a DIY flat christmas decoration with a ATtiny25, 20 led´s and a coin cell battery 
 
+## Differencies from the original project
+- Converted to PlatformIo project for ease run animation compressing script and setting fusses
+- More animations
+- Significantly reduced memory footprint
+- Improved power consumption optimizations
+
 ## DIY 2D christmas decoration
 
 ![Image from the 2D xmas tree](https://github.com/designer2k2/2d-xmas-tree/raw/master/img/2dxmastree_gif.gif)
