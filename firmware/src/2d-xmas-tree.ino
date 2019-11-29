@@ -67,10 +67,18 @@ static uint8_t currentAnimation = 0;
 // Intro time (how long the random change happens) in ms:
 #define STARTS_ANIMATION_TIME_MS 10000
 
+// If you soldered LED upside down and animation looks weird set this flag to trues
+#define REVERSED_LEDS false
+
 // This holds the pin configuration to make the 20 led charlieplexing.
 struct LedControlPin {
-  uint8_t pvcc : 4;
-  uint8_t pgnd : 4;
+  #if REVERSED_LEDS
+    uint8_t pgnd : 4;
+    uint8_t pvcc : 4;
+  #else
+    uint8_t pvcc : 4;
+    uint8_t pgnd : 4;
+  #endif
 };
 
 const LedControlPin ledControlPins[] = {
@@ -105,11 +113,33 @@ void setup() {
 
   // Shut down Timer/Counter1, Timer/Counter0, ISI, ADC
   PRR = 1;
+
+  testAnimation();
 }
 
 void loop() {
   showStarsAnimation();
   showNextPreprogrammedAnimation();
+}
+
+void testAnimation() {
+  // Show all leds
+  for (int i = 0; i < NUM_LEDS; ++i) {
+    ledstate[i] = 1;
+  }
+  showleds(1000);
+
+  // Show single led in order
+  for (int i = 0; i < NUM_LEDS; ++i) {
+    for (int j = 0; j < NUM_LEDS; ++j) {
+      ledstate[j] = i == j ? 1 : 0;
+    }
+    showleds(500);
+  }
+
+  // Show none
+  extinguish();
+  _delay_ms(1000);
 }
 
 uint16_t fastRandom() {
