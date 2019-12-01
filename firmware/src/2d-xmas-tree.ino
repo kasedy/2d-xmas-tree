@@ -62,13 +62,20 @@ static const uint16_t animationEndFrames[] = ANIMATION_END_FRAMES;
 static uint8_t currentAnimation = 0;
 
 // The delay in ms between the Frames when displaying preprogramed animation.
-#define PATTERN_DELAY 500
+#define ANIMATION_FRAME_TIME 500
 
 // Intro time (how long the random change happens) in ms:
 #define STARTS_ANIMATION_TIME_MS 10000
 
-// If you soldered LED upside down and animation looks weird set this flag to trues
+// If you soldered LED upside down and animation looks weird set this flag to "true".
 #define REVERSED_LEDS false
+
+// LEDs will have the same brightness regardles how many LEDs are on. Every enabled LED 
+// will shine no more than 1/20 of animation frame time. Resistors should give 10-15 mA 
+// through a single LED. If the flag set to "false" animation frames with a single LED 
+// on will be brighter than when multiple leds are on. Resistors should give 2-3 mA 
+// current through a single LED.
+#define COMPENSATED_BRIGHTNESS true
 
 // This holds the pin configuration to make the 20 led charlieplexing.
 struct LedControlPin {
@@ -127,14 +134,14 @@ void testAnimation() {
   for (int i = 0; i < NUM_LEDS; ++i) {
     ledstate[i] = 1;
   }
-  showleds(1000);
+  showleds(2000);
 
   // Show single led in order
   for (int i = 0; i < NUM_LEDS; ++i) {
     for (int j = 0; j < NUM_LEDS; ++j) {
       ledstate[j] = i == j ? 1 : 0;
     }
-    showleds(500);
+    showleds(400);
   }
 
   // Show none
@@ -156,7 +163,7 @@ void showStarsAnimation() {
     uint16_t randomValue = fastRandom();
     int ledtoset = randomValue % NUM_LEDS;
     bool ledbool = randomValue & 0b10000000;
-    ledstate[ledtoset] = ledbool;
+    ledstate[ledtoset] = ledbool ? 1 : 0;
     showleds(25);
     extinguish();
     #if F_CPU >= 1000000L
@@ -188,10 +195,10 @@ void showNextPreprogrammedAnimation() {
         byteIndex += 1;
         state = pgm_read_byte(animation + byteIndex);
       }
-      ledstate[i] = (state & (1 << bitIndex));
+      ledstate[i] = (state & (1 << bitIndex)) ? 1 : 0;
       bitIndex += 1;
     }
-    showleds(PATTERN_DELAY); 
+    showleds(ANIMATION_FRAME_TIME); 
   }
 
   if (++currentAnimation >= ARRAY_LEN(animationEndFrames)) {
@@ -207,26 +214,32 @@ void showleds(unsigned int showTimeMs) {
   unsigned long startTime = millis();
   while (true) {
     for (int i = 0; i < NUM_LEDS; i++) {
-      bool ledOn = ledstate[i];
-      if (ledOn) {
-        showled(i);
-      }
-      if (millis() - startTime > showTimeMs) {
-        return;
-      }
+      showled(i);
+    }
+    if (millis() - startTime > showTimeMs) {
+      return;
     }
   }
 }
 
 void showled(uint8_t led) {
+  // If enable
+  uint8_t ledOn = ledstate[led];
+
+  #if !COMPENSATED_BRIGHTNESS
+    if (!ledOn) {
+      return;
+    }
+  #endif
+
   // Lookup the pin for high and low:
   const LedControlPin &pinouts = ledControlPins[led];
 
   // Set pins that contold LED to output. The other pins will be set to input.
-  DDRB = (1 << pinouts.pvcc) | (1 << pinouts.pgnd);
+  DDRB = (ledOn << pinouts.pvcc) | (ledOn << pinouts.pgnd);
 
   // Write the status.
-  PORTB = (1 << pinouts.pvcc); // set HIGH
+  PORTB = (ledOn << pinouts.pvcc); // set HIGH
 
   // Dont extinguish. Let LED shine while microcontroller decides which LED to 
   // light next.
@@ -234,6 +247,6 @@ void showled(uint8_t led) {
 
 void extinguish() {
   // This tristates all pins
-  DDRB &= ~(0b00011111); // Input state for pins 0-4 pins
-  PORTB &= ~(0b00011111); //ensure pullups are off.
+  DDRB = 0; // Input state for pins 0-4 pins
+  PORTB = 0; //ensure pullups are off.
 }
