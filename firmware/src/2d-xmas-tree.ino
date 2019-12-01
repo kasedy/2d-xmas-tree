@@ -223,7 +223,7 @@ void showleds(unsigned int showTimeMs) {
 }
 
 void showled(uint8_t led) {
-  // If enable
+  // It should 1 if LED is enabled or 0 if disabled.
   uint8_t ledOn = ledstate[led];
 
   #if !COMPENSATED_BRIGHTNESS
