@@ -39,6 +39,18 @@
   SOFTWARE.
 */
 
+/*
+
++----------------------------------------------------------------+
+|                      Resistor Values                           |
++--------+-------------+----------------------+------------------+
+| color  | LED voltage | non-compensated mode | compensated mode |
++--------+-------------+----------------------+------------------+
+| yellow |      2V     |    125 - 250 Ohm     |    30 - 50 Ohm   |
++--------+-------------+----------------------+------------------+
+
+*/
+
 #include "helpers.h"
 
 #include <avr/pgmspace.h>
@@ -73,9 +85,9 @@ static uint8_t currentAnimation = 0;
 // LEDs will have the same brightness regardles how many LEDs are on. Every enabled LED 
 // will shine no more than 1/20 of animation frame time. Resistors should give 10-15 mA 
 // through a single LED. If the flag set to "false" animation frames with a single LED 
-// on will be brighter than when multiple leds are on. Resistors should give 2-3 mA 
+// on will be brighter than when multiple leds are on. Resistors should give 2-4 mA 
 // current through a single LED.
-#define COMPENSATED_BRIGHTNESS true
+#define COMPENSATED_BRIGHTNESS false
 
 // This holds the pin configuration to make the 20 led charlieplexing.
 struct LedControlPin {
