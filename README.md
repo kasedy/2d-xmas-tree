@@ -1,7 +1,7 @@
 # 2d-xmas-Tree-art
 A DIY flat christmas decoration with a ATtiny25, 20 led´s and a coin cell battery 
 
-## Differencies from the original project
+## New Features
 - Converted to [PlatformIo](https://platformio.org/) project
 - Uploading firmware and setting fuses get easier
 - Added animation compressing script
@@ -13,7 +13,7 @@ A DIY flat christmas decoration with a ATtiny25, 20 led´s and a coin cell batte
 
 ![Image from the 2D xmas tree](img/2dxmastree_gif.gif)
 
-This is a only 2 dimensional pcb with all the components embedded into the 1,6mm thick pcb itself.
+This is the only 2-dimensional pcb with all the components embedded into the 1,6mm thick pcb itself.
 The components are placed with the help of castellation into the pcb. 
 
 ![Castellation with component](img/castellation_0805.PNG)
@@ -22,7 +22,7 @@ The components are placed with the help of castellation into the pcb.
 
 The PCB design is made with KiCad 5.0.1
 
-The PCB should be 1,6mm thick to hide the components inside. last time I ordered them from [DirtyPCbs](https://dirtypcbs.com/) as suggesed [@designer2k2](https://github.com/designer2k2). They handle castellation but you still need to clean metal contacts from bended metalization debris. Next time going to order with [JLCPCB](https://jlcpcb.com/) as I like more their bright solder mask color. To order PCB use prepared gerber archive [2D_xmas_tree01_gerber_complete.zip](https://raw.githubusercontent.com/kasedy/2d-xmas-tree-art/master/pcb-kicad/gerb/2D_xmas_tree01_gerber_complete.zip)
+The PCB should be 1,6mm thick to hide the components inside. Last time I ordered them from [DirtyPCbs](https://dirtypcbs.com/) as suggesed by [@designer2k2](https://github.com/designer2k2). They handle castellation, but you still need to clean metal contacts from bended metalization debris. Next time I'm going to order with [JLCPCB](https://jlcpcb.com/) as I like their bright solder mask color more. To order PCB, use prepared gerber archive [2D_xmas_tree01_gerber_complete.zip](https://raw.githubusercontent.com/kasedy/2d-xmas-tree-art/master/pcb-kicad/gerb/2D_xmas_tree01_gerber_complete.zip)
 
 Most of the PCB is to give it the look of a tree or house, it uses the different color achievable by blending the different layers. Here is a good article on possible colors: https://hackaday.com/2018/06/11/ask-hackaday-what-color-are-your-pcbs/
 
@@ -48,21 +48,21 @@ You are free to use any other LED apart proposed above. Please select R1-R5 resi
 | --- | --- | --- | --- |
 | yellow | 2V | 125 - 250 Ohm | 30 - 50 Ohm |
 
-In a compensated mode LEDs will have the same brightness regardless how many LEDs are shining. Every enabled LED will shine no more than 1/20 of animation frame time. Resistors should give 10-15 mA through a single LED. In non-compensated mode an animation frame with a single LED on will look brighter than an animation with multiple LEDs are on. Resistors should give 2-4 mA current through a single LED. Non-compensated brightness mode is a default as it gives almost the same brightness for animation frames with high number LEDs enabled but frames with low number active LEDs look much brighter for the same current consumption from a battery. To change the mode update value of COMPENSATED_BRIGHTNESS flag.
+In a compensated mode LEDs will have the same brightness regardless how many LEDs are shining. Every enabled LED will shine no more than 1/20 of animation frame time. Resistors should give 10-15 mA through a single LED. In non-compensated mode the animation frame with a single LED on will look brighter than an animation with multiple LEDs on. Resistors should give 2-4 mA current through a single LED. Non-compensated brightness mode is a default as it gives almost the same brightness for animation frames with high number LEDs enabled, but frames with low number active LEDs look much brighter for the same current consumption from a battery. To change the mode update value of COMPENSATED_BRIGHTNESS flag.
 
 ## Assembly
 
-Assembly might be a little channanging. The full process can be seen in this [youtube video](https://www.youtube.com/watch?v=K6z7--RqQHQ). I'll mention here only the tricky parts.
+Assembly might be a little challenging. The full process can be seen in this [youtube video](https://www.youtube.com/watch?v=K6z7--RqQHQ). I'll mention here only the tricky parts.
 
-Solder the LED oriented with the cathode to the line, like shown on the picture. If you by some reason soldered LEDs upside down and animation looks weird set REVERSED_LEDS flag to "true" when compile the firmware.
+Solder the LED oriented with the cathode to the line, like it's shown on the picture. If you by some reason soldered LEDs upside down and animation looks weird, set REVERSED_LEDS flag to "true" when compile the firmware.
 
 ![LED orientation](https://github.com/designer2k2/2d-xmas-tree/raw/master/img/led_orientation.PNG)
 
-The ATtiny feet needs to be trimmed very closely to the body that it fits inside the cutout.
+The ATtiny feet needs to be trimmed very closely to the body to fit it inside the cutout.
 
 ![ATtiny soldered with trimmed feet](https://github.com/designer2k2/2d-xmas-tree/raw/master/img/attiny_soldered.JPG)
 
-Use very thin wire to create a kind of spider web for the battery, put dont shortcut it!
+Use very thin wire to create a kind of spider web for the battery, but don't shortcut it!
 
 ![Battery wire web](https://github.com/designer2k2/2d-xmas-tree/raw/master/img/batteryweb.jpg)
 
@@ -77,7 +77,7 @@ Then use some tape to secure it in place.
 - Connect ISP programmer head
 - Run "Set Fuses" and "Upload" under "attiny25_1MHz" build rule
 
-To program ATtiny microcontroller ISP programmer is needed. For example and open-source [USB ASP](https://www.fischl.de/usbasp/). As an alternative some Arduinos can be converted to a ISP programmer with ArduinoISP https://www.arduino.cc/en/Tutorial/ArduinoISP.
+To program ATtiny microcontroller ISP programmer is needed. For example an open-source [USB ASP](https://www.fischl.de/usbasp/). As an alternative some Arduinos can be converted to a ISP programmer with ArduinoISP https://www.arduino.cc/en/Tutorial/ArduinoISP.
 
 ![Arduino as ISP to programm the 2d xmas tree](img/2d_xmas_tree_programming.jpg)
 
@@ -89,6 +89,6 @@ ISP Pinout:
 
 ## Create your own animation!
 
-Use [graphical interface](https://kasedy.github.io/2d-xmas-tree-art/) to create unique animation. Copy every frame value into [animation.txt](firmware/src/animation.txt). After animation is ready compile and upload firmware.
+Use [graphical interface](https://kasedy.github.io/2d-xmas-tree-art/) to create unique animation. Copy every frame value into [animation.txt](firmware/src/animation.txt). After animation is ready compile and upload the firmware.
 
 [![GUI demonstration](img/animation.gif)](https://kasedy.github.io/2d-xmas-tree-art/)
