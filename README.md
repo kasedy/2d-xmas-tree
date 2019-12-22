@@ -1,5 +1,5 @@
 # 2d-xmas-Tree-art
-a DIY flat christmas decoration with a ATtiny25, 20 led´s and a coin cell battery 
+A DIY flat christmas decoration with a ATtiny25, 20 led´s and a coin cell battery 
 
 ## Differencies from the original project
 - Converted to [PlatformIo](https://platformio.org/) project
@@ -32,12 +32,13 @@ Most of the PCB is to give it the look of a tree or house, it uses the different
 | --- | --- | --- | --- | --- | --- | --- | --- |
 |BT|2|BT1-BT2|Battery_Cell|CR2016|-|-| <img src="./img/partlist/CR2016.jpg" height="50"> |
 |C|1|C1|22µF|0805|790-0682|1276-6786-1-ND| <img src="./img/partlist/0805 capacitor.jpg" height="50"> |
-|D|20|D1-D20|LED|0805|176-6117|516-1431-1-ND| |
-|J|1|J1|ISP||-|-| |
-|R|5|R1-R5|75|0805|-|RR12Q75DCT-ND| |
-|R|1|R6|10k|0805|125-1189|RR12P10.0KDCT-ND| |
-|SW|1|SW1|SW_SPDT|PCM12SMTR|793-1721|401-2016-1-ND| |
-|U|1|U1|ATTINY25-20SU|SOIC8|133-1611|ATTINY25-20SU-ND| |
+|D|20|D1-D20|LED|0805|176-6117|516-1431-1-ND| <img src="./img/partlist/led.jpg" height="50"> |
+|R|5|R1-R5|75|0805|-|RR12Q75DCT-ND| <img src="./img/partlist/resistor.jpg" height="50"> |
+|R|1|R6|10k|0805|125-1189|RR12P10.0KDCT-ND| <img src="./img/partlist/resistor.jpg" height="50"> |
+|SW|1|SW1|SW_SPDT|PCM12SMTR|793-1721|401-2016-1-ND| <img src="./img/partlist/switch.jpg" height="50"> |
+|U|1|U1|ATTINY25-20SU|SOIC8|133-1611|ATTINY25-20SU-ND| <img src="./img/partlist/attiny.jpg" height="50"> |
+
+ATiny-45 and ATiny-85 will work as well as ATtiny-25 but ATtiny-25 is cheaper and has enough memory to fit the sketch. To program ATtiny microcontroller I suggest to get ISP programmer. For example and open-source [USB ASP](https://www.fischl.de/usbasp/).
 
 ## Create your own animation!
 
