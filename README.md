@@ -54,7 +54,7 @@ In a compensated mode LEDs will have the same brightness regardless how many LED
 
 Assembly might be a little channanging. The full process can be seen in this [youtube video](https://www.youtube.com/watch?v=K6z7--RqQHQ). I'll mention here only the tricky parts.
 
-Solder the LED oriented with the cathode to the line, like this:
+Solder the LED oriented with the cathode to the line, like shown on the picture. If you by some reason soldered LEDs upside down and animation looks weird set REVERSED_LEDS flag to "true" when compile the firmware.
 
 ![LED orientation](https://github.com/designer2k2/2d-xmas-tree/raw/master/img/led_orientation.PNG)
 
