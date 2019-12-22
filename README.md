@@ -16,9 +16,7 @@ a DIY flat christmas decoration with a ATtiny25, 20 led´s and a coin cell batte
 This is a only 2 dimensional pcb with all the components embedded into the 1,6mm thick pcb itself.
 The components are placed with the help of castellation into the pcb. 
 
-![Castellation empty](https://github.com/designer2k2/2d-xmas-tree/raw/master/img/castellation_empty.PNG) ![Castellation with component](https://github.com/designer2k2/2d-xmas-tree/raw/master/img/castellation_0805.PNG)
-
-All files including the Code for the ATtiny and the KiCad Files for the PCB are here, OSHW!
+![Castellation with component](https://github.com/designer2k2/2d-xmas-tree/raw/master/img/castellation_0805.PNG)
 
 # PCB
 
