@@ -50,6 +50,26 @@ You are free to use any other LED apart proposed above. Please select R1-R5 resi
 
 In a compensated mode LEDs will have the same brightness regardless how many LEDs are shining. Every enabled LED will shine no more than 1/20 of animation frame time. Resistors should give 10-15 mA through a single LED. In non-compensated mode an animation frame with a single LED on will look brighter than an animation with multiple LEDs are on. Resistors should give 2-4 mA current through a single LED. Non-compensated brightness mode is a default as it gives almost the same brightness for animation frames with high number LEDs enabled but frames with low number active LEDs look much brighter for the same current consumption from a battery. To change the mode update value of COMPENSATED_BRIGHTNESS flag.
 
+## Assembly
+
+Assembly might be a little channanging. The full process can be seen in this [youtube video](https://www.youtube.com/watch?v=K6z7--RqQHQ). I'll mention here only the tricky parts.
+
+Solder the LED oriented with the cathode to the line, like this:
+
+![LED orientation](https://github.com/designer2k2/2d-xmas-tree/raw/master/img/led_orientation.PNG)
+
+The ATtiny feet needs to be trimmed very closely to the body that it fits inside the cutout.
+
+![ATtiny soldered with trimmed feet](https://github.com/designer2k2/2d-xmas-tree/raw/master/img/attiny_soldered.JPG)
+
+Use very thin wire to create a kind of spider web for the battery, put dont shortcut it!
+
+![Battery wire web](https://github.com/designer2k2/2d-xmas-tree/raw/master/img/batteryweb.jpg)
+
+Then use some tape to secure it in place.
+
+![Battery mounted in place](https://github.com/designer2k2/2d-xmas-tree/raw/master/img/batterymounted.PNG)
+
 ## Create your own animation!
 
 a helper to get the patterns graphically made: https://designer2k2.github.io/2d-xmas-tree/
