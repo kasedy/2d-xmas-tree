@@ -89,6 +89,6 @@ ISP Pinout:
 
 ## Create your own animation!
 
-Use [graphical interface](https://kasedy.github.io/2d-xmas-tree-art/) to create unique animation. Copy every frame value into [animation.txt](firmware/src/animation.txt). After animation is ready compile and upload firmware.
+Use [graphical interface](https://kasedy.github.io/2d-xmas-tree-art/) to create unique animation. Copy every frame value into [animation.txt](firmware/src/animation.txt). After animation is ready compile and upload the firmware.
 
 [![GUI demonstration](img/animation.gif)](https://kasedy.github.io/2d-xmas-tree-art/)
