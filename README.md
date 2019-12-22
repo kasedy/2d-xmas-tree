@@ -38,7 +38,7 @@ Most of the PCB is to give it the look of a tree or house, it uses the different
 |SW|1|SW1|SW_SPDT|PCM12SMTR|793-1721|401-2016-1-ND|[MSK-12C02](https://www.aliexpress.com/item/32863424888.html)|<img src="./img/partlist/switch.jpg" height="50">|
 |U|1|U1|ATTINY25-20SU|SOIC8|133-1611|ATTINY25-20SU-ND|-|<img src="./img/partlist/attiny.jpg" height="50">|
 
-ATiny-45 and ATiny-85 will work as well as ATtiny-25 but ATtiny-25 is cheaper and has enough memory to fit the sketch. To program ATtiny microcontroller I suggest to get ISP programmer. For example and open-source [USB ASP](https://www.fischl.de/usbasp/).
+ATiny-45 and ATiny-85 will work as well as ATtiny-25 but ATtiny-25 is cheaper and has enough memory to fit the sketch.
 
 ## LED
 
@@ -70,12 +70,25 @@ Then use some tape to secure it in place.
 
 ![Battery mounted in place](https://github.com/designer2k2/2d-xmas-tree/raw/master/img/batterymounted.PNG)
 
+## Upload Firmware
+
+- Install [PlatformIo](https://platformio.org/)
+- Download and open the project at "firmware" directory
+- Connect ISP programmer head
+- Run "Set Fuses" and "Upload" under "attiny25_1MHz" build rule
+
+To program ATtiny microcontroller ISP programmer is needed. For example and open-source [USB ASP](https://www.fischl.de/usbasp/). As an alternative some Arduinos can be converted to a ISP programmer with ArduinoISP https://www.arduino.cc/en/Tutorial/ArduinoISP.
+
+![Arduino as ISP to programm the 2d xmas tree](img/2d_xmas_tree_programming.jpg)
+
+ISP Pinout:
+
+![ISP Pinout](https://github.com/designer2k2/2d-xmas-tree/raw/master/img/isp_pinout.PNG)
+
+![ISP pinout in PCB](https://github.com/designer2k2/2d-xmas-tree/raw/master/img/isp_inpcb.PNG)
+
 ## Create your own animation!
 
 a helper to get the patterns graphically made: https://designer2k2.github.io/2d-xmas-tree/
 
 ![GUI demonstration](https://github.com/designer2k2/2d-xmas-tree/raw/master/img/animation.gif)
-
-## make your own
-
-see the wiki page on how to make it: https://github.com/designer2k2/2d-xmas-tree/wiki
