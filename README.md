@@ -2,10 +2,12 @@
 a DIY flat christmas decoration with a ATtiny25, 20 led´s and a coin cell battery 
 
 ## Differencies from the original project
-- Converted to PlatformIo project for ease run animation compressing script and setting fusses
-- More animations
+- Converted to [PlatformIo](https://platformio.org/) project
+- More convinient for building and setting fuses
+- Added animation compressing script
 - Significantly reduced memory footprint
-- Improved power consumption optimizations
+- More default animations
+- Reduced power consumption
 
 ## DIY 2D christmas decoration
 
