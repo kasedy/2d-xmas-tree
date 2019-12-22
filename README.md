@@ -89,6 +89,6 @@ ISP Pinout:
 
 ## Create your own animation!
 
-a helper to get the patterns graphically made: https://designer2k2.github.io/2d-xmas-tree/
+Use [graphical interface](https://kasedy.github.io/2d-xmas-tree-art/) to create unique animation. Copy every frame value into [animation.txt](firmware/src/animation.txt). After animation is ready compile and upload firmware.
 
 ![GUI demonstration](https://github.com/designer2k2/2d-xmas-tree/raw/master/img/animation.gif)
