@@ -1,7 +1,7 @@
 # 2d-xmas-Tree-art
 A DIY flat christmas decoration with a ATtiny25, 20 led´s and a coin cell battery 
 
-## Differencies from the original project
+## New Features
 - Converted to [PlatformIo](https://platformio.org/) project
 - Uploading firmware and setting fuses get easier
 - Added animation compressing script
