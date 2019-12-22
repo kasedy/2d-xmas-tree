@@ -18,7 +18,7 @@ The components are placed with the help of castellation into the pcb.
 
 ![Castellation with component](img/castellation_0805.PNG)
 
-# PCB
+## PCB
 
 The PCB design is made with KiCad 5.0.1
 
@@ -26,17 +26,17 @@ The PCB should be 1,6mm thick to hide the components inside. last time I ordered
 
 Most of the PCB is to give it the look of a tree or house, it uses the different color achievable by blending the different layers. Here is a good article on possible colors: https://hackaday.com/2018/06/11/ask-hackaday-what-color-are-your-pcbs/
 
-# Partlist
+## Partlist
 
-|ID|Quantity|Ref|Value|Footprint|RS|Digikey|Img|
-| --- | --- | --- | --- | --- | --- | --- | --- |
-|BT|2|BT1-BT2|Battery_Cell|CR2016|-|-| <img src="./img/partlist/battery.jpg" height="50"> |
-|C|1|C1|22µF|0805|790-0682|1276-6786-1-ND| <img src="./img/partlist/capacitor.jpg" height="50"> |
-|D|20|D1-D20|LED|0805|176-6117|516-1431-1-ND| <img src="./img/partlist/led.jpg" height="50"> |
-|R|5|R1-R5|75|0805|-|RR12Q75DCT-ND| <img src="./img/partlist/resistor.jpg" height="50"> |
-|R|1|R6|10k|0805|125-1189|RR12P10.0KDCT-ND| <img src="./img/partlist/resistor.jpg" height="50"> |
-|SW|1|SW1|SW_SPDT|PCM12SMTR|793-1721|401-2016-1-ND| <img src="./img/partlist/switch.jpg" height="50"> |
-|U|1|U1|ATTINY25-20SU|SOIC8|133-1611|ATTINY25-20SU-ND| <img src="./img/partlist/attiny.jpg" height="50"> |
+|ID|#|Ref|Value|Footprint|RS|Digikey|Aliexpress|Img|
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|BT|2|BT1-BT2|Battery Cell|CR2016|-|-|-|<img src="./img/partlist/battery.jpg" height="50">|
+|C|1|C1|22µF|0805|790-0682|1276-6786-1-ND|-|<img src="./img/partlist/capacitor.jpg" height="50">|
+|D|20|D1-D20|LED|0805|176-6117|516-1431-1-ND|-|<img src="./img/partlist/led.jpg" height="50">|
+|R|5|R1-R5|75|0805|-|RR12Q75DCT-ND|-|<img src="./img/partlist/resistor.jpg" height="50">|
+|R|1|R6|10k|0805|125-1189|RR12P10.0KDCT-ND|-|<img src="./img/partlist/resistor.jpg" height="50">|
+|SW|1|SW1|SW_SPDT|PCM12SMTR|793-1721|401-2016-1-ND|[MSK-12C02](https://www.aliexpress.com/w/wholesale-MSK%25252d12C02.html)|<img src="./img/partlist/switch.jpg" height="50">|
+|U|1|U1|ATTINY25-20SU|SOIC8|133-1611|ATTINY25-20SU-ND|-|<img src="./img/partlist/attiny.jpg" height="50">|
 
 ATiny-45 and ATiny-85 will work as well as ATtiny-25 but ATtiny-25 is cheaper and has enough memory to fit the sketch. To program ATtiny microcontroller I suggest to get ISP programmer. For example and open-source [USB ASP](https://www.fischl.de/usbasp/).
 
