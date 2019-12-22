@@ -30,8 +30,8 @@ Most of the PCB is to give it the look of a tree or house, it uses the different
 
 |ID|Quantity|Ref|Value|Footprint|RS|Digikey|Img|
 | --- | --- | --- | --- | --- | --- | --- | --- |
-|BT|2|BT1-BT2|Battery_Cell|CR2016|-|-| <img src="./img/partlist/CR2016.jpg" height="50"> |
-|C|1|C1|22µF|0805|790-0682|1276-6786-1-ND| <img src="./img/partlist/0805 capacitor.jpg" height="50"> |
+|BT|2|BT1-BT2|Battery_Cell|CR2016|-|-| <img src="./img/partlist/battery.jpg" height="50"> |
+|C|1|C1|22µF|0805|790-0682|1276-6786-1-ND| <img src="./img/partlist/capacitor.jpg" height="50"> |
 |D|20|D1-D20|LED|0805|176-6117|516-1431-1-ND| <img src="./img/partlist/led.jpg" height="50"> |
 |R|5|R1-R5|75|0805|-|RR12Q75DCT-ND| <img src="./img/partlist/resistor.jpg" height="50"> |
 |R|1|R6|10k|0805|125-1189|RR12P10.0KDCT-ND| <img src="./img/partlist/resistor.jpg" height="50"> |
