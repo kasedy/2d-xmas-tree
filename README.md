@@ -3,7 +3,7 @@ A DIY flat christmas decoration with a ATtiny25, 20 led´s and a coin cell batte
 
 ## Differencies from the original project
 - Converted to [PlatformIo](https://platformio.org/) project
-- More convinient for building and setting fuses
+- Uploading firmware and setting fuses get easier
 - Added animation compressing script
 - Significantly reduced memory footprint
 - More default animations
