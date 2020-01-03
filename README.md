@@ -44,11 +44,16 @@ ATiny-45 and ATiny-85 will work as well as ATtiny-25 but ATtiny-25 is cheaper an
 
 You are free to use any other LED apart proposed above. Please select R1-R5 resistors value according to the table.
 
-| LED color | LED voltage | non-compensated mode | compensated mode |
-| --- | --- | --- | --- |
-| yellow | 2V | 125 - 250 Ohm | 30 - 50 Ohm |
+| Color | V<sub>min</sub> | V<sub>max</sub> | non-compensated mode | compensated mode |
+| --- | --- | --- | --- | --- |
+| Red | 1.7 | 2.0 | | |
+| Yellow | 1.8 | 2.05 | 125 - 250 Ohm | 30 - 50 Ohm |
+| Orange | 1.8 | 2.05 | | |
+| Green | 2.1 | 3.3 | | |
+| White | 2.4 | 3.1 | | |
+| Blue | 2.4 | 3.25 | | |
 
-In a compensated mode LEDs will have the same brightness regardless how many LEDs are shining. Every enabled LED will shine no more than 1/20 of animation frame time. Resistors should give 10-15 mA through a single LED. In non-compensated mode the animation frame with a single LED on will look brighter than an animation with multiple LEDs on. Resistors should give 2-4 mA current through a single LED. Non-compensated brightness mode is a default as it gives almost the same brightness for animation frames with high number LEDs enabled, but frames with low number active LEDs look much brighter for the same current consumption from a battery. To change the mode update value of COMPENSATED_BRIGHTNESS flag.
+In a compensated mode LEDs will have the same brightness regardless how many LEDs are shining. Every enabled LED will shine no more than 1/20 of animation frame time. Resistors should give up to 10-15 mA through a single LED. In non-compensated mode the animation frame with a single LED on will look brighter than an animation with multiple LEDs on. Resistors should give up to 2-4 mA current through a single LED. Non-compensated brightness mode is a default as it gives almost the same brightness for animation frames with high number LEDs enabled, but frames with low number active LEDs look much brighter for the same current consumption from a battery. To change the mode update value of COMPENSATED_BRIGHTNESS flag.
 
 ## Assembly
 
