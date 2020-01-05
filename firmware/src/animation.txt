@@ -1,6 +1,6 @@
 Enter the light pattern here.
 Use the online generator: https://kasedy.github.io/2d-xmas-tree-art/
-Split different animations with a line to display "stars" animation in between
+Split different animations with a line to break them with preprogrammed "stars" animation
 
 =========================================
 Snake animation that goes counter-clockwise

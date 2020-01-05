@@ -39,18 +39,6 @@
   SOFTWARE.
 */
 
-/*
-
-+----------------------------------------------------------------+
-|                      Resistor Values                           |
-+--------+-------------+----------------------+------------------+
-| color  | LED voltage | non-compensated mode | compensated mode |
-+--------+-------------+----------------------+------------------+
-| yellow |      2V     |    125 - 250 Ohm     |    30 - 50 Ohm   |
-+--------+-------------+----------------------+------------------+
-
-*/
-
 #include "helpers.h"
 
 #include <avr/pgmspace.h>
@@ -73,6 +61,9 @@ static const uint8_t animation[] PROGMEM = COMPILED_ANIMATION;
 static const uint16_t animationEndFrames[] = ANIMATION_END_FRAMES;
 static uint8_t currentAnimation = 0;
 
+// Light every led in order after power on. Good to test quality of soldering.
+#define SHOW_TEST_ANIMATION_AT_START false
+
 // The delay in ms between the Frames when displaying preprogramed animation.
 #define ANIMATION_FRAME_TIME 500
 
@@ -80,7 +71,7 @@ static uint8_t currentAnimation = 0;
 #define STARTS_ANIMATION_TIME_MS 10000
 
 // If you soldered LED upside down and animation looks weird set this flag to "true".
-#define REVERSED_LEDS false
+#define REVERSED_LEDS true
 
 // LEDs will have the same brightness regardles how many LEDs are on. Every enabled LED 
 // will shine no more than 1/20 of animation frame time. Resistors should give 10-15 mA 
@@ -133,7 +124,9 @@ void setup() {
   // Shut down Timer/Counter1, Timer/Counter0, ISI, ADC
   PRR = 1;
 
-  testAnimation();
+  #if SHOW_TEST_ANIMATION_AT_START
+    testAnimation();
+  #endif
 }
 
 void loop() {
