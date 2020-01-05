@@ -42,14 +42,14 @@ ATiny-45 and ATiny-85 will work as well as ATtiny-25 but ATtiny-25 is cheaper an
 
 ## LED
 
-You are free to use any other LED apart proposed above. Please select R1-R5 resistors value according to the table.
+You are free to use any other LED apart proposed above. Please select R1-R5 resistors value according to the table. The lower resistor value the brighter will be LEDs but battery life also will get shorter.
 
 | Color | V<sub>min</sub> | V<sub>max</sub> | non-compensated mode | compensated mode |
 | --- | --- | --- | --- | --- |
 | Red | 1.70 | 2.00 | | |
-| Yellow | 1.80 | 2.05 | 125 - 250 Ohm | 30 - 50 Ohm |
+| Yellow | 1.80 | 2.05 | 125 - 250 | 30 - 50 |
 | Orange | 1.80 | 2.05 | | |
-| Green | 2.10 | 3.30 | | |
+| Green | 2.10 | 3.30 | 680 - 470 - 150 | |
 | White | 2.40 | 3.10 | | |
 | Blue | 2.40 | 3.25 | | |
 
