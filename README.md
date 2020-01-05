@@ -49,8 +49,8 @@ You are free to use any other LED apart proposed above. Please select R1-R5 resi
 | Red | 1.70 | 2.00 | | |
 | Yellow | 1.80 | 2.05 | 125 - ? - 250 | 30 - 50 |
 | Orange | 1.80 | 2.05 | | |
-| Green | 2.10 | 3.30 | 330 - 680 - 1800 | 35 - 75 |
-| White | 2.40 | 3.10 | 100 - 479 - 680 | |
+| Green | 2.10 | 3.30 | 330 - 680 - 1800 | 30 - 75 |
+| White | 2.40 | 3.10 | 100 - 479 - 680 | 30 - 100 |
 | Blue | 2.40 | 3.25 | | |
 
 In a compensated mode LEDs will have the same brightness regardless how many LEDs are shining. Every enabled LED will shine no more than 1/20 of animation frame time. Resistors should give up to 10-15 mA through a single LED. In non-compensated mode the animation frame with a single LED on will look brighter than an animation with multiple LEDs on. Resistors should give up to 2-4 mA current through a single LED. Non-compensated brightness mode is a default as it gives almost the same brightness for animation frames with high number LEDs enabled, but frames with low number active LEDs look much brighter for the same current consumption from a battery. To change the mode update value of COMPENSATED_BRIGHTNESS flag.
