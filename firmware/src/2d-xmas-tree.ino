@@ -71,7 +71,7 @@ static uint8_t currentAnimation = 0;
 #define STARTS_ANIMATION_TIME_MS 10000
 
 // If you soldered LED upside down and animation looks weird set this flag to "true".
-#define REVERSED_LEDS true
+#define REVERSED_LEDS false
 
 // LEDs will have the same brightness regardles how many LEDs are on. Every enabled LED 
 // will shine no more than 1/20 of animation frame time. Resistors should give 10-15 mA 
