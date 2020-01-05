@@ -49,7 +49,7 @@ You are free to use any other LED apart proposed above. Please select R1-R5 resi
 | Red | 1.70 | 2.00 | | |
 | Yellow | 1.80 | 2.05 | 125 - 250 | 30 - 50 |
 | Orange | 1.80 | 2.05 | | |
-| Green | 2.10 | 3.30 | 680 - 470 - 150 | |
+| Green | 2.10 | 3.30 | 680 - 470 - 150 | 30 - 65 |
 | White | 2.40 | 3.10 | | |
 | Blue | 2.40 | 3.25 | | |
 
