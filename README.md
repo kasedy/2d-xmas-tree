@@ -46,7 +46,7 @@ You are free to use any other LED apart proposed above. Please select R1-R5 resi
 
 | Nice <br> look | Color | V<sub>min</sub> | V<sub>max</sub> | Non-compensated mode (Ohm) <br> Min - Recomended - Max | Compensated mode (Ohm) <br> Min - Max |
 | :---: | :---: | :---: | :---: | :---: | :---: |
-| | Red | 1.70 | 2.00 | 150 - 330 - 680 | 30 - 50 |
+| :x: | Red | 1.70 | 2.00 | 150 - 330 - 680 | 30 - 50 |
 | :heavy_check_mark: | Yellow | 1.80 | 2.05 | 125 - 160 - 250 | 30 - 50 |
 | | Orange | 1.80 | 2.05 | 125 - 160 - 250 | 30 - 50 |
 | :x: | Green | 2.10 | 3.30 | 330 - 680 - 1800 | 30 - 75 |
